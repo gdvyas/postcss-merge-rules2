@@ -1,7 +1,5 @@
 'use strict';
 
-exports.__esModule = true;
-
 var _browserslist = require('browserslist');
 
 var _browserslist2 = _interopRequireDefault(_browserslist);
@@ -269,17 +267,37 @@ function selectorMerger(browsers, compatibilityCache) {
     };
 }
 
-exports.default = _postcss2.default.plugin('postcss-merge-rules2', function () {
-    return function (css, result) {
-        var opts = result.opts;
-
-        var browsers = (0, _browserslist2.default)(null, {
+/*
+export default postcss.plugin('postcss-merge-rules2', () => {
+    return (css, result) => {
+        const { opts } = result;
+        const browsers = browserslist(null, {
             stats: opts && opts.stats,
             path: opts && opts.from,
-            env: opts && opts.env
+            env: opts && opts.env,
         });
-        var compatibilityCache = {};
+        const compatibilityCache = {};
         css.walkRules(selectorMerger(browsers, compatibilityCache));
     };
-});
-module.exports = exports['default'];
+});*/
+
+module.exports = function () {
+    var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    //checkOpts(opts)
+    return {
+        postcssPlugin: 'postcss-merge-rules2',
+        Once: function Once(css, result) {
+            var opts = result.opts;
+
+            var browsers = (0, _browserslist2.default)(null, {
+                stats: opts && opts.stats,
+                path: opts && opts.from,
+                env: opts && opts.env
+            });
+            var compatibilityCache = {};
+            css.walkRules(selectorMerger(browsers, compatibilityCache));
+        }
+    };
+};
+module.exports.postcss = true;

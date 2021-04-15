@@ -215,6 +215,7 @@ function selectorMerger(browsers, compatibilityCache) {
     };
 }
 
+/*
 export default postcss.plugin('postcss-merge-rules2', () => {
     return (css, result) => {
         const { opts } = result;
@@ -226,4 +227,22 @@ export default postcss.plugin('postcss-merge-rules2', () => {
         const compatibilityCache = {};
         css.walkRules(selectorMerger(browsers, compatibilityCache));
     };
-});
+});*/
+
+module.exports = (opts = {}) => {
+       //checkOpts(opts)
+       return {
+         postcssPlugin: 'postcss-merge-rules2',
+         Once (css, result)  {
+            const { opts } = result;
+            const browsers = browserslist(null, {
+                stats: opts && opts.stats,
+                path: opts && opts.from,
+                env: opts && opts.env,
+            });
+            const compatibilityCache = {};
+            css.walkRules(selectorMerger(browsers, compatibilityCache));
+        }
+       }
+}
+module.exports.postcss = true
