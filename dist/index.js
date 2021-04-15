@@ -231,7 +231,8 @@ function selectorMerger(browsers, compatibilityCache) {
                 if (~cached.indexOf(String(decl))) {
                     return decl.remove();
                 }
-                decl.moveTo(cacheList[rule.selector]);
+                //decl.moveTo(cacheList[rule.selector]);
+                cacheList[rule.selector].append(decl);
             });
             rule.remove();
             return;
